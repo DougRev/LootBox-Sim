@@ -1,0 +1,76 @@
+.loot-box-management {
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.items-selection .item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin: 5px;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.items-selection .item.selected {
+  background-color: #add8e6;
+  transform: scale(1.05);
+  border-color: #007bff;
+}
+
+.drop-rates {
+  margin-top: 20px;
+}
+
+.drop-rates div {
+  margin-bottom: 10px;
+}
+
+.drop-rates div label {
+  margin-right: 10px;
+}
+
+input[type="text"], textarea, input[type="number"] {
+  margin: 10px 0;
+  padding: 8px;
+  width: calc(100% - 16px);
+  box-sizing: border-box;
+}
+
+.total-percentage {
+  font-weight: bold;
+  color: red;
+}
+
+
+.loot-box-list {
+  margin-top: 20px;
+}
+
+.loot-box-summary {
+  padding: 10px;
+  background-color: #e0e0e0;
+  margin: 10px 0;
+}
+
+.loot-box-details {
+  padding: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .loot-box-management, .items-selection .item, input[type="text"], textarea, input[type="number"], button {
+      width: 100%;
+  }
+  .rarity-filter {
+      flex-direction: column;
+  }
+}

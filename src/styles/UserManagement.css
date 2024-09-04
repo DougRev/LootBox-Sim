@@ -1,0 +1,60 @@
+.user-management-container {
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+  }
+  
+  .user-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+  }
+  
+  .user-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .user-list-item div:first-child {
+    flex: 1;
+  }
+  
+  .user-list-item div:last-child {
+    display: flex;
+    gap: 10px;
+  }
+  
+  
+  .user-list-item button {
+    padding: 5px 10px;
+    margin-left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .user-list-item button:hover {
+    background-color: #0056b3;
+  }
+  
+  .user-list-item button:nth-child(2) {
+    background-color: #28a745;
+  }
+  
+  .user-list-item button:nth-child(2):hover {
+    background-color: #218838;
+  }
+  
+  .user-list-item button:nth-child(3) {
+    background-color: #dc3545;
+  }
+  
+  .user-list-item button:nth-child(3):hover {
+    background-color: #c82333;
+  }
+  

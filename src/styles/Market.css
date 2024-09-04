@@ -1,0 +1,18 @@
+.market-container {
+    padding: 20px;
+  }
+  
+  .items-for-sale .item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  .items-for-sale img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+  

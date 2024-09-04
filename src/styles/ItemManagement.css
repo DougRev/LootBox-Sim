@@ -1,0 +1,136 @@
+.new-item-container {
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .new-item-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .new-item-form input, .new-item-form select, .new-item-form button {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100%;
+  }
+  
+  .new-item-form button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .new-item-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .item-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+  }
+  
+  .item-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    flex-wrap: wrap; /* Ensures responsiveness */
+  }
+  
+  .item-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+  
+  .item-list-item button {
+    padding: 5px 10px;
+    margin: 2px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .item-list-item button:hover {
+    background-color: #218838;
+  }
+
+  .item-title {
+    display: inline-flex;
+  }
+  
+  .add-item-btn{
+    background-color: none;
+  }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .pagination button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .pagination button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .rarity-filter {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .rarity-filter button {
+    padding: 8px 16px;
+    margin-right: 10px;
+    background-color: #7d8581;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .rarity-filter button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .item-list-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .item-image {
+      margin-bottom: 10px;
+    }
+  
+    .new-item-form {
+      width: 100%;
+    }
+  
+    .rarity-filter {
+      flex-direction: column;
+    }
+  }
+  

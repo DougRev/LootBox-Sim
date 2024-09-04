@@ -1,0 +1,76 @@
+.items-received {
+    display: flex;
+    flex-direction: row; /* Ensure cards are listed horizontally */
+    justify-content: space-around; /* Distribute space evenly around the items */
+    align-items: center; /* Align items vertically */
+    gap: 20px; /* Space between the cards */
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.card {
+    width: 150px;  /* Adjust width for better visibility */
+    height: 220px; /* Adjust height to fit content properly */
+    cursor: pointer;
+    perspective: 1000px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+
+.card-front, .card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    transition: transform 0.6s;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+}
+
+.card-back {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card h3{
+    margin:0;
+}
+
+.card-front {
+    color: white;
+    background-color: tan;
+    transform: rotateY(180deg);
+}
+
+.card-image {
+    width: 20%;
+}
+
+.card.flipped .card-back {
+    transform: rotateY(180deg);
+}
+
+.card.flipped .card-front {
+    transform: rotateY(0deg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+
+}
+
+.back-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
