@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth, storage } from '../firebase';
 import { generateLootBoxItems } from '../utils/simulateLootBox';
-import { doc, updateDoc, getDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { ref, getDownloadURL } from 'firebase/storage';
 import { useUser } from '../contexts/UserContext';
 import '../styles/LootBox.css';
 
-const LootBox = ({ lootBox, allItems }) => {
+const LootBox = ({ lootBox, allItems, onBack }) => {
   const [opened, setOpened] = useState(false);
   const [itemsReceived, setItemsReceived] = useState([]);
   const [cardBackImage, setCardBackImage] = useState('');
   const { userGold, setUserGold } = useUser();
 
   useEffect(() => {
-    // Pre-fetch the card back image
     const fetchCardBackImage = async () => {
       try {
         const url = await getDownloadURL(ref(storage, 'public/images/card-back.png'));
@@ -32,12 +31,8 @@ const LootBox = ({ lootBox, allItems }) => {
       const items = generateLootBoxItems(lootBox, allItems);
       setItemsReceived(items.map(item => ({ ...item, flipped: false })));
       setOpened(true);
-  
-      // Update user's gold
       const userRef = doc(db, "users", auth.currentUser.uid);
       await updateDoc(userRef, { gold: newGold });
-  
-      // Update user's inventory with new items
       const userDoc = await getDoc(userRef);
       const currentInventory = userDoc.data().inventory || [];
       const updatedInventory = [...currentInventory, ...items.map(item => item.id)];
@@ -53,9 +48,8 @@ const LootBox = ({ lootBox, allItems }) => {
     ));
   };
 
-  const handleBack = () => {
-    setOpened(false); // Reset the opened state
-  };
+  const sortedDropRates = Object.entries(lootBox.dropRates)
+    .sort((a, b) => b[1] - a[1]);
 
   return (
     <div className="loot-box">
@@ -65,6 +59,23 @@ const LootBox = ({ lootBox, allItems }) => {
           <h3>{lootBox.name} - Cost: {lootBox.cost} Gold</h3>
           <p>{lootBox.description}</p>
           <button onClick={openLootBox}>Buy Box</button>
+          <button onClick={onBack}>Back to Loot Boxes</button>
+          <table className="drop-rates-table">
+            <thead>
+              <tr>
+                <th>Rarity</th>
+                <th>Drop Rate (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedDropRates.map(([rarity, rate]) => (
+                <tr key={rarity}>
+                  <td>{rarity.charAt(0).toUpperCase() + rarity.slice(1)}</td>
+                  <td>{rate}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </>
       )}
       {opened && (
@@ -82,7 +93,7 @@ const LootBox = ({ lootBox, allItems }) => {
               </div>
             ))}
           </div>
-          <button onClick={handleBack}>Back to Loot Boxes</button>
+          <button onClick={onBack}>Back to Loot Boxes</button>
         </>
       )}
     </div>

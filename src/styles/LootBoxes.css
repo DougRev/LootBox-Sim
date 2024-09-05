@@ -3,6 +3,7 @@
     align-items: center;
     padding: 20px;
     display: flex;
+    background-color: var(--pakistan-green);
 }
 
 .loot-box-list {
@@ -21,9 +22,20 @@
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
+.loot-box-summary {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    padding: 10px;
+    margin: 10px 0;
+}
 
-.loot-box:hover {
+.loot-box-summary img{
+    width: 150px;
+    height: 150px;
+}
+
+.loot-box-summary:hover {
     transform: translateY(-5px);
+
 }
 
 .loot-box button {
@@ -44,6 +56,17 @@
 .loot-box button.active {
     border: solid 1px white;
     
+}
+
+.details-btn {
+    background-color: var(--tiger-eye);
+    padding: 10px;
+
+}
+
+.details-btn:hover {
+    background-color: var(--cornsilk);
+    color: black;
 }
 
 

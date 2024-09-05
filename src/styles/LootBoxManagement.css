@@ -49,12 +49,6 @@ input[type="text"], textarea, input[type="number"] {
   margin-top: 20px;
 }
 
-.loot-box-summary {
-  padding: 10px;
-  background-color: var(--dark-moss-green);
-  margin: 10px 0;
-}
-
 .loot-box-details {
   padding: 20px;
   background-color: white;
