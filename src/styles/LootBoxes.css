@@ -6,7 +6,7 @@
 }
 
 .loot-box-list {
-    border: solid 1px black;
+    display: flex;
     text-align: center;
 }
 
@@ -15,15 +15,19 @@
 }
 
 .loot-box {
-    border: solid 1px black;
     text-align: center;
     padding-bottom: 10px;
-    background-color: gray;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 
+.loot-box:hover {
+    transform: translateY(-5px);
+}
+
 .loot-box button {
-    background-color: #007bff;
+    background-color: var(--tiger-eye);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -32,5 +36,14 @@
 }
 
 .loot-box button:hover {
-    background-color: #0056b3;
+    background-color: var(--dark-moss-green);
+    border: solid 1px white;
+
 }
+
+.loot-box button.active {
+    border: solid 1px white;
+    
+}
+
+

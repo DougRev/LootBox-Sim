@@ -2,6 +2,7 @@
 
 .inventory-container {
     padding: 20px;
+    background-color: var(--pakistan-green);
   }
   
   .filter-tabs {
