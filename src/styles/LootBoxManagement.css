@@ -66,6 +66,30 @@ input[type="text"], textarea, input[type="number"] {
   z-index: 10;
 }
 
+.input-file {
+  margin: 10px 0;
+  padding: 5px;
+  border: 1px solid #ccc;
+  display: inline-block;
+}
+
+.input-file input[type="file"] {
+  display: none;
+}
+
+.input-file label {
+  background-color: #f8f8f8;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.input-file label:hover {
+  background-color: #e0e0e0;
+}
+
+
 @media (max-width: 768px) {
   .loot-box-management, .items-selection .item, input[type="text"], textarea, input[type="number"], button {
       width: 100%;

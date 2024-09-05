@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { ref, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../firebase';
+import { db } from '../firebase';
 import LootBox from '../components/LootBox';
 import '../styles/LootBoxes.css';
 
 const LootBoxes = () => {
   const [lootBoxes, setLootBoxes] = useState([]);
-  const [allItems, setAllItems] = useState([]); 
+  const [allItems, setAllItems] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,31 +14,21 @@ const LootBoxes = () => {
         getDocs(collection(db, 'lootBoxes')),
         getDocs(collection(db, 'items'))
       ]);
-  
+
       const items = itemSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setAllItems(items);
-  
-      const boxes = lootBoxSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  
-      const boxesWithImages = await Promise.all(boxes.map(async (box) => {
-        try {
-          const imagePath = `public/images/${box.name.replace(/\s+/g, '-').toLowerCase()}.png`;
-          const imageRef = ref(storage, imagePath);
-          box.image = await getDownloadURL(imageRef);
-        } catch (error) {
-          console.error('Error fetching image for loot box:', error);
-          box.image = '/path/to/default/image.png';
-        }
-        return box;
-      }));
-  
-      setLootBoxes(boxesWithImages);
+
+      const boxes = lootBoxSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        image: doc.data().image || '/path/to/default/image.png' 
+    }));
+
+      setLootBoxes(boxes);
     };
-  
+
     fetchData();
   }, []);
-  
-
 
   return (
     <div className="loot-boxes-container">

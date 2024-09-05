@@ -13,11 +13,11 @@ const LootBox = ({ lootBox, allItems }) => {
   const { userGold, setUserGold } = useUser();
 
   useEffect(() => {
+    // Pre-fetch the card back image
     const fetchCardBackImage = async () => {
       try {
         const url = await getDownloadURL(ref(storage, 'public/images/card-back.png'));
         setCardBackImage(url);
-        console.log("Card back image loaded successfully.");
       } catch (error) {
         console.error("Failed to load card back image", error);
       }
@@ -27,53 +27,41 @@ const LootBox = ({ lootBox, allItems }) => {
 
   const openLootBox = async () => {
     if (!opened && userGold >= lootBox.cost) {
-      console.log("Attempting to open loot box:", lootBox.name);
       const newGold = userGold - lootBox.cost;
       setUserGold(newGold);
       const items = generateLootBoxItems(lootBox, allItems);
-      console.log("Items generated:", items);
       setItemsReceived(items.map(item => ({ ...item, flipped: false })));
       setOpened(true);
   
       // Update user's gold
       const userRef = doc(db, "users", auth.currentUser.uid);
       await updateDoc(userRef, { gold: newGold });
-      console.log(`Gold updated to ${newGold}`);
   
-      // Fetch the current inventory, then update
+      // Update user's inventory with new items
       const userDoc = await getDoc(userRef);
       const currentInventory = userDoc.data().inventory || [];
-  
-      // Include new items, allowing duplicates
       const updatedInventory = [...currentInventory, ...items.map(item => item.id)];
-  
-      // Update the inventory in Firestore
       await updateDoc(userRef, { inventory: updatedInventory });
-      console.log("Inventory updated with new items.");
     } else if (userGold < lootBox.cost) {
-      console.error("Not enough gold to open the loot box.");
-      alert("Not enough gold.");
+      alert("Not enough gold to open the loot box.");
     }
   };
-  
 
   const revealItem = index => {
     setItemsReceived(items => items.map((item, idx) => 
       idx === index ? { ...item, flipped: true } : item
     ));
-    console.log(`Item at index ${index} revealed.`);
   };
 
   const handleBack = () => {
-    console.log("Returning to loot box selection.");
-    setOpened(false); // Reset the opened state to show the loot box list again
+    setOpened(false); // Reset the opened state
   };
 
   return (
     <div className="loot-box">
       {!opened && (
         <>
-          <img src={lootBox.image} alt={lootBox.name} />
+          <img src={lootBox.image} alt={lootBox.name} style={{ maxWidth: '100%' }} />
           <h3>{lootBox.name} - Cost: {lootBox.cost} Gold</h3>
           <p>{lootBox.description}</p>
           <button onClick={openLootBox}>Buy Box</button>
