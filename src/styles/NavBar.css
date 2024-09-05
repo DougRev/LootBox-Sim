@@ -4,6 +4,7 @@ nav {
   }
   
   nav ul {
+    color: white;
     list-style-type: none;
     display: flex;
     gap: 15px;

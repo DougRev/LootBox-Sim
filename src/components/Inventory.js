@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import '../styles/Inventory.css';
 
 const Inventory = ({ userId }) => {
@@ -18,13 +18,28 @@ const Inventory = ({ userId }) => {
       const userRef = doc(db, 'users', userId);
       const userDoc = await getDoc(userRef);
       if (userDoc.exists()) {
-        const itemIds = userDoc.data().inventory || [];
-        const itemQueries = itemIds.map(id => doc(db, 'items', id));
-        const itemsSnapshot = await Promise.all(itemQueries.map(getDoc));
-        setInventoryItems(itemsSnapshot.filter(doc => doc.exists()).map(doc => ({ id: doc.id, ...doc.data() })));
+        const userItems = userDoc.data().inventory || [];
+        // Aggregate counts for each item ID
+        const itemCounts = userItems.reduce((acc, itemId) => {
+          acc[itemId] = (acc[itemId] || 0) + 1;
+          return acc;
+        }, {});
+
+        // Fetch details for each unique item
+        const itemsDetails = await Promise.all(
+          Object.entries(itemCounts).map(async ([itemId, count]) => {
+            const itemDoc = await getDoc(doc(db, 'items', itemId));
+            return {
+              ...itemDoc.data(),
+              id: itemDoc.id,
+              count: count
+            };
+          })
+        );
+        setInventoryItems(itemsDetails);
       }
     };
-  
+
     fetchInventory();
   }, [userId, activeRarity]);
 
@@ -47,13 +62,14 @@ const Inventory = ({ userId }) => {
         ))}
       </div>
       <div className="inventory-grid">
-        {displayedItems.map((item, index) => (
-          <div key={index} className="inventory-item-card">
+        {displayedItems.map((item) => (
+          <div key={item.id} className="inventory-item-card">
             <img src={item.image} alt={item.name} />
             <div className="item-details">
               <h3>{item.name}</h3>
               <p>{item.description}</p>
               <span className="item-rarity">{item.rarity}</span>
+              <span className="item-count">Count: {item.count}</span> 
             </div>
           </div>
         ))}

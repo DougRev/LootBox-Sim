@@ -8,40 +8,38 @@ import '../styles/LootBoxes.css';
 const LootBoxes = () => {
   const [lootBoxes, setLootBoxes] = useState([]);
   const [allItems, setAllItems] = useState([]); 
-  const [selectedBox, setSelectedBox] = useState(null);
 
   useEffect(() => {
-    const fetchLootBoxes = async () => {
-      const lootBoxSnapshot = await getDocs(collection(db, 'lootBoxes'));
-      const itemSnapshot = await getDocs(collection(db, 'items'));
+    const fetchData = async () => {
+      const [lootBoxSnapshot, itemSnapshot] = await Promise.all([
+        getDocs(collection(db, 'lootBoxes')),
+        getDocs(collection(db, 'items'))
+      ]);
+  
       const items = itemSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      const boxesWithImages = await Promise.all(lootBoxSnapshot.docs.map(async (doc) => {
-        const boxData = { id: doc.id, ...doc.data() };
+      setAllItems(items);
+  
+      const boxes = lootBoxSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+      const boxesWithImages = await Promise.all(boxes.map(async (box) => {
         try {
-          const imagePath = `public/images/${boxData.name.replace(/\s+/g, '-').toLowerCase()}.png`;
+          const imagePath = `public/images/${box.name.replace(/\s+/g, '-').toLowerCase()}.png`;
           const imageRef = ref(storage, imagePath);
-          boxData.image = await getDownloadURL(imageRef);
+          box.image = await getDownloadURL(imageRef);
         } catch (error) {
           console.error('Error fetching image for loot box:', error);
-          boxData.image = '/path/to/default/image.png'; 
+          box.image = '/path/to/default/image.png';
         }
-        return boxData;
+        return box;
       }));
-
+  
       setLootBoxes(boxesWithImages);
-      setAllItems(items);  
     };
-    fetchLootBoxes();
+  
+    fetchData();
   }, []);
+  
 
-  const handleSelectBox = (box) => {
-    setSelectedBox(box); 
-  };
-
-  const handleBackToSelection = () => {
-    setSelectedBox(null);
-  };
 
   return (
     <div className="loot-boxes-container">

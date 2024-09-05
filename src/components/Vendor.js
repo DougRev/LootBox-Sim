@@ -1,84 +1,97 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { increment } from 'firebase/firestore';
-import '../styles/Vendor.css';
+import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
+import { useUser } from '../contexts/UserContext';
+import '../styles/Vendor.css';  // Make sure this path is correct
 
 const Vendor = () => {
   const [inventoryItems, setInventoryItems] = useState([]);
-  const [gold, setGold] = useState(0);
+  const { userGold, setUserGold } = useUser();
 
   useEffect(() => {
-    const fetchUserInventory = async () => {
+    const fetchInventory = async () => {
       if (auth.currentUser) {
         const userRef = doc(db, 'users', auth.currentUser.uid);
-        const userDoc = await getDoc(userRef);
-        if (userDoc.exists()) {
-          const userItems = userDoc.data().inventory || [];
-          // Create an object to count items
-          const itemCounts = userItems.reduce((acc, itemId) => {
-            acc[itemId] = (acc[itemId] || 0) + 1;
-            return acc;
-          }, {});
-
-          // Fetch each item details and count how many of them are in inventory
-          const itemsDetails = await Promise.all(
-            Object.keys(itemCounts).map(itemId => 
-              getDoc(doc(db, 'items', itemId)).then(itemDoc => ({
-                ...itemDoc.data(),
-                id: itemDoc.id,
-                count: itemCounts[itemDoc.id]
-              }))
-            )
-          );
-
-          setInventoryItems(itemsDetails.filter(item => item.count > 0)); // Only show items with count greater than 0
-          setGold(userDoc.data().gold || 0); // Set gold from user's data
+        const docSnap = await getDoc(userRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const inventoryMap = {};
+          if (data.inventory && data.inventory.length > 0) {
+            console.log('Fetching item details for inventory IDs:', data.inventory);
+            const promises = data.inventory.map(itemId => getDoc(doc(db, 'items', itemId)));
+            const docs = await Promise.all(promises);
+            docs.forEach(doc => {
+              if (doc.exists()) {
+                const itemData = doc.data();
+                const itemId = doc.id;
+                if (!inventoryMap[itemId]) {
+                  inventoryMap[itemId] = { ...itemData, id: itemId, count: 1 };
+                } else {
+                  inventoryMap[itemId].count += 1;
+                }
+              }
+            });
+            setInventoryItems(Object.values(inventoryMap));
+            console.log('Detailed Inventory:', Object.values(inventoryMap));
+          } else {
+            setInventoryItems([]);
+            console.log('No inventory items found or empty inventory.');
+          }
+        } else {
+          console.log('User document does not exist.');
         }
       }
     };
 
-    fetchUserInventory();
+    fetchInventory();
   }, []);
 
-  const handleSellItem = async (item) => {
-    const newCount = item.count - 1;
-    if (newCount >= 0) {
-      setGold(gold + item.value);
-      setInventoryItems(inventoryItems.map(it => it.id === item.id ? { ...it, count: newCount } : it).filter(it => it.count > 0));
-      updateUserGold(auth.currentUser.uid, item.value);
-      updateInventory(auth.currentUser.uid, item.id, -1);
-    }
-  };
+  const handleSellItem = async (itemId, value) => {
+    const updatedInventoryItems = inventoryItems.map(item => {
+      if (item.id === itemId && item.count > 1) {
+        return { ...item, count: item.count - 1 };
+      } else if (item.id === itemId && item.count === 1) {
+        return null;  // This will filter out the item completely if count goes to zero
+      }
+      return item;
+    }).filter(item => item !== null);
 
-  const updateUserGold = async (userId, amount) => {
-    const userRef = doc(db, 'users', userId);
-    await updateDoc(userRef, {
-      gold: increment(amount)
-    });
-  };
+    setInventoryItems(updatedInventoryItems);
+    setUserGold(userGold + value);
 
-  const updateInventory = async (userId, itemId, delta) => {
-    const userRef = doc(db, 'users', userId);
-    // For simplicity, this is pseudo-code, you'll need to properly manage inventory in Firestore
+    const userRef = doc(db, 'users', auth.currentUser.uid);
     await updateDoc(userRef, {
-      // Update inventory logic based on your Firestore structure
+      gold: increment(value),
+      inventory: updatedInventoryItems.map(item => item.id)  // Assuming each item only stored once
     });
+    console.log(`Sold item ${itemId}, updated gold and inventory in Firestore.`);
   };
 
   return (
-    <div>
-      <h2>Vendor</h2>
-      <div>Your Gold: {gold.toLocaleString()}</div>
-      <div className="items-for-sale">
-        {inventoryItems.map((item) => (
-          <div key={item.id} className="item">
-            <img src={item.image} alt={item.name} />
-            <p>{item.name} - {item.value.toLocaleString()} Gold (x{item.count})</p>
-            <button onClick={() => handleSellItem(item)} disabled={item.count <= 0}>Sell</button>
-          </div>
-        ))}
-      </div>
+    <div className="vendor-wrapper">
+      <h1 className="vendor-title">Vendor</h1>
+      <table className="vendor-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Count</th>
+            <th>Value</th>
+            <th>Sell</th>
+          </tr>
+        </thead>
+        <tbody>
+          {inventoryItems.map((item, index) => (
+            <tr key={index}>
+              <td>{item.name}</td>
+              <td>{item.count}</td>
+              <td>{item.value.toLocaleString()}</td>
+              <td>
+                <button className="vendor-button" onClick={() => handleSellItem(item.id, item.value)}>Sell</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

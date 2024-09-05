@@ -7,12 +7,12 @@ import NavBar from './components/NavBar';
 import LootBoxes from './pages/LootBoxes';
 import Inventory from './components/Inventory';
 import Market from './pages/Market';
-import Vendor from './components/Vendor';
-
+import { useUser } from './contexts/UserContext';
 import { auth } from './firebase';
+import './App.css';
 
 function App() {
-  const [user, setUser] = React.useState(null);
+  const { user, setUser } = useUser();
 
   React.useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -23,6 +23,7 @@ function App() {
   }, []);
 
   return (
+    <div className="appContainer">
     <Router>
       <NavBar />
       <Routes>
@@ -34,6 +35,7 @@ function App() {
         <Route path="/market" element={<Market />} />
         </Routes>
     </Router>
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 .user-management-container {
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: var(--dark-moss-green);
     border-radius: 8px;
   }
   

@@ -21,7 +21,7 @@ const AuthForm = () => {
 
         await setDoc(doc(db, "users", userCredential.user.uid), {
           email: userCredential.user.email,  
-          balance: 1000, 
+          gold: 5000, 
           inventory: [],  
           role: "user" 
         });
@@ -50,7 +50,7 @@ const AuthForm = () => {
       if (!userDoc.exists()) {
         await setDoc(userDocRef, {
           email: result.user.email,  
-          balance: 1000, 
+          gold: 5000, 
           inventory: [],  
           role: "user" 
         });

@@ -6,8 +6,12 @@
 }
 
 .loot-box-list {
-    flex-wrap: wrap;
-    gap: 20px;
+    border: solid 1px black;
+    text-align: center;
+}
+
+.loot-box-list img {
+    width: 150px;
 }
 
 .loot-box {
@@ -17,11 +21,6 @@
     background-color: gray;
 }
 
-
-.loot-box img {
-    width: 150px;
-    height: auto;
-}
 
 .loot-box button {
     background-color: #007bff;

@@ -1,3 +1,5 @@
+@import '../styles.css';
+
 .inventory-container {
     padding: 20px;
   }
@@ -16,7 +18,7 @@
 }
   
 .inventory-item-card {
-    background: white;
+    background: var(--earth-yellow);
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
@@ -80,15 +82,20 @@
     padding: 10px 20px;
     margin: 0 5px;
     border: none;
-    background-color: #f0f0f0;
+    background-color: var(--tiger-eye);
     cursor: pointer;
     transition: background-color 0.3s;
   }
   
   .filter-tabs button.active,
   .filter-tabs button:hover {
-    background-color: #007bff;
+    background-color: var(--dark-moss-green);
     color: white;
+  }
+
+  .filter-tabs button.active {
+    border: solid 1px white;
+
   }
   
   .pagination {

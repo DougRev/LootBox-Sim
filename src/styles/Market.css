@@ -1,5 +1,6 @@
 .market-container {
     padding: 20px;
+    background-color: var(--pakistan-green);
   }
   
   .items-for-sale .item {
@@ -16,3 +17,8 @@
     object-fit: cover;
   }
   
+  .market-title {
+    color: var(--earth-yellow);
+    padding-left: 20px;
+    
+  }

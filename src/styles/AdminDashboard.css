@@ -9,20 +9,19 @@
   .tab-buttons button {
     padding: 10px 20px;
     margin-right: 10px;
-    background-color: #7d8581;
-    border: 1px solid #ccc;
+    background-color: var(--tiger-eye);
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
   
   .tab-buttons button.active {
-    background-color: #007bff;
+    background-color: var(--dark-moss-green);
     color: white;
-    border-color: #0056b3;
+    border-color: var(--cornsilk);
   }
   
   .tab-buttons button:hover {
-    background-color: #0056b3;
+    background-color: var(--dark-moss-green);
     color: white;
   }
   

@@ -17,6 +17,7 @@ const LootBoxManagement = () => {
   });
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [cost, setCost] = useState(0);
   const [totalPercentage, setTotalPercentage] = useState(100);
   const [formVisible, setFormVisible] = useState(false);
   const [editingLootBoxId, setEditingLootBoxId] = useState(null);
@@ -57,6 +58,7 @@ const LootBoxManagement = () => {
       setName(lootBox.name);
       setDescription(lootBox.description);
       setDropRates(lootBox.dropRates);
+      setCost(lootBox.cost)
       setSelectedItems(new Set(lootBox.items.map(item => item.itemId)));
       setEditingLootBoxId(lootBox.id);
     } else {
@@ -75,7 +77,8 @@ const LootBoxManagement = () => {
       name,
       description,
       items: lootBoxItems.map(item => ({ itemId: item.id, rarity: item.rarity })),
-      dropRates
+      dropRates,
+      cost
     };
 
     if (editingLootBoxId) {
@@ -91,6 +94,7 @@ const LootBoxManagement = () => {
   const resetForm = () => {
     setName('');
     setDescription('');
+    setCost(0);
     setDropRates({
       common: 65,
       uncommon: 25,
@@ -117,6 +121,7 @@ const LootBoxManagement = () => {
         <div>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name of Loot Box" />
           <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description of Loot Box" />
+          <input type="number" value={cost} onChange={(e) => setCost(Number(e.target.value))} placeholder="Cost in Gold" />
           <div className="items-selection">
             {items.map(item => (
               <div key={item.id} className={`item ${selectedItems.has(item.id) ? 'selected' : ''}`} onClick={() => handleSelectItem(item.id)}>

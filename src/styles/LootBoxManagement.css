@@ -1,6 +1,6 @@
 .loot-box-management {
   padding: 20px;
-  background-color: #f4f4f4;
+  background-color: var(--pakistan-green);
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -51,7 +51,7 @@ input[type="text"], textarea, input[type="number"] {
 
 .loot-box-summary {
   padding: 10px;
-  background-color: #e0e0e0;
+  background-color: var(--dark-moss-green);
   margin: 10px 0;
 }
 

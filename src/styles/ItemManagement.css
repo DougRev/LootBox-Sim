@@ -1,6 +1,5 @@
 .new-item-container {
     padding: 20px;
-    background-color: #f4f4f4;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
@@ -54,7 +53,7 @@
   .item-list-item button {
     padding: 5px 10px;
     margin: 2px;
-    background-color: #28a745;
+    background-color: var(--tiger-eye);
     color: white;
     border: none;
     border-radius: 4px;
@@ -62,7 +61,7 @@
   }
   
   .item-list-item button:hover {
-    background-color: #218838;
+    background-color: var(--dark-moss-green);
   }
 
   .item-title {
@@ -81,7 +80,7 @@
   .pagination button {
     padding: 5px 10px;
     margin: 0 5px;
-    background-color: #007bff;
+    background-color: var(--tiger-eye);
     color: white;
     border: none;
     border-radius: 4px;
@@ -102,16 +101,22 @@
   .rarity-filter button {
     padding: 8px 16px;
     margin-right: 10px;
-    background-color: #7d8581;
+    background-color: var(--tiger-eye);
     border: 1px solid #ccc;
     cursor: pointer;
     transition: background-color 0.3s;
   }
   
   .rarity-filter button.active {
-    background-color: #007bff;
+    background-color: var(--dark-moss-green);
     color: white;
-    border-color: #0056b3;
+    border: solid 1px var(--cornsilk);
+  }
+
+  .rarity-filter button:hover {
+    background-color: var(--dark-moss-green);
+    color: white;
+    border: solid 1px var(--cornsilk);
   }
   
   /* Responsive adjustments */
